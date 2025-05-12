@@ -3,6 +3,7 @@ import AudioTest from "./components/AudioTest";
 import ClientOnly from "./components/ClientOnly";
 import VoiceChat from "./components/VoiceChat";
 import TextToSpeech from "./components/TextToSpeech";
+import GeminiChat from "./components/GeminiChat";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <VoiceChat />
         <AudioRecorder />
         <TextToSpeech />
+        <GeminiChat />
       </ClientOnly>
     </div>
   );
