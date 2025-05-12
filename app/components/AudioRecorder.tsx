@@ -16,9 +16,9 @@ export default function AudioRecorder() {
     console.log("Docs: ", res);
   }
 
-  // useEffect(() => {
-  //   fetchDocs();
-  // }, []);
+  useEffect(() => {
+    fetchDocs();
+  }, []);
 
   const startRecording = async () => {
     setAudioURL(null);
