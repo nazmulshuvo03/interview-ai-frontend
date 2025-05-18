@@ -12,18 +12,18 @@ import { Room, Track } from "livekit-client";
 import "@livekit/components-styles";
 import { useEffect, useState } from "react";
 import TranscriptionFeed from "../components/TranscriptionFeed";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function Page() {
-  // TODO: get user input for room and name
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const room = searchParams.get("room") || "default-room";
+  const name = searchParams.get("user") || "anonymous";
   const [token, setToken] = useState("");
-  const room = "quickstart-room";
-  const name = "quickstart-user";
   const [roomInstance] = useState(
     () =>
       new Room({
-        // Optimize video quality for each participant's screen
         adaptiveStream: true,
-        // Enable automatic audio/video quality optimization
         dynacast: true,
       }),
   );
@@ -51,7 +51,12 @@ export default function Page() {
       mounted = false;
       roomInstance.disconnect();
     };
-  }, [roomInstance]);
+  }, [roomInstance, room, name]);
+
+  const handleLeave = async () => {
+    await roomInstance.disconnect();
+    router.push("/");
+  };
 
   if (token === "") {
     return <div>Getting token...</div>;
@@ -60,12 +65,15 @@ export default function Page() {
   return (
     <RoomContext.Provider value={roomInstance}>
       <div data-lk-theme="default" style={{ height: "100dvh" }}>
-        {/* Your custom component with basic video conferencing functionality. */}
         <MyVideoConference />
-        {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
         <RoomAudioRenderer />
-        {/* Controls for the user to start/stop audio, video, and screen share tracks */}
         <ControlBar />
+        <button
+          onClick={handleLeave}
+          className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Leave Room
+        </button>
       </div>
       <TranscriptionFeed />
     </RoomContext.Provider>
@@ -73,8 +81,6 @@ export default function Page() {
 }
 
 function MyVideoConference() {
-  // `useTracks` returns all camera and screen share tracks. If a user
-  // joins without a published camera track, a placeholder track is returned.
   const tracks = useTracks(
     [
       { source: Track.Source.Camera, withPlaceholder: true },
@@ -87,8 +93,6 @@ function MyVideoConference() {
       tracks={tracks}
       style={{ height: "calc(100vh - var(--lk-control-bar-height))" }}
     >
-      {/* The GridLayout accepts zero or one child. The child is used
-      as a template to render all passed in tracks. */}
       <ParticipantTile />
     </GridLayout>
   );
