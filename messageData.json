@@ -1,0 +1,282 @@
+[
+  {
+    "id": "SG_4bed35deaddd",
+    "text": "Hello.",
+    "final": false,
+    "firstReceivedTime": 1747545668547,
+    "lastReceivedTime": 1747545668547,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_edfd5c60acf7",
+    "text": "Yes,",
+    "final": false,
+    "firstReceivedTime": 1747545669275,
+    "lastReceivedTime": 1747545669275,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_edfd5c60acf7",
+    "text": "Yes, how",
+    "final": false,
+    "firstReceivedTime": 1747545669275,
+    "lastReceivedTime": 1747545669540,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_edfd5c60acf7",
+    "text": "Yes, how can",
+    "final": false,
+    "firstReceivedTime": 1747545669275,
+    "lastReceivedTime": 1747545669801,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_edfd5c60acf7",
+    "text": "Yes, how can I",
+    "final": false,
+    "firstReceivedTime": 1747545669275,
+    "lastReceivedTime": 1747545670063,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_edfd5c60acf7",
+    "text": "Yes, how can I help",
+    "final": false,
+    "firstReceivedTime": 1747545669275,
+    "lastReceivedTime": 1747545670328,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_edfd5c60acf7",
+    "text": "Yes, how can I help you?",
+    "final": false,
+    "firstReceivedTime": 1747545669275,
+    "lastReceivedTime": 1747545670401,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_edfd5c60acf7",
+    "text": "Yes, how can I help you?\n",
+    "final": false,
+    "firstReceivedTime": 1747545669275,
+    "lastReceivedTime": 1747545670401,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_edfd5c60acf7",
+    "text": "Yes, how can I help you?\n",
+    "final": true,
+    "firstReceivedTime": 1747545669275,
+    "lastReceivedTime": 1747545670401,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_4bed35deaddd",
+    "text": "I don't know.",
+    "final": false,
+    "firstReceivedTime": 1747545668547,
+    "lastReceivedTime": 1747545676758,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay.",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545677870,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545678132,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545678393,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545678655,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545678917,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545679180,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545679574,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545679968,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or need",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545680232,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or need anything",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545680627,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or need anything further,",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545681148,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or need anything further, we",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545681540,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or need anything further, we can",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545681812,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or need anything further, we can end",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545681813,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or need anything further, we can end this",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545681813,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or need anything further, we can end this conversation.",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545681813,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or need anything further, we can end this conversation.\n",
+    "final": false,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545681814,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  },
+  {
+    "id": "SG_44e284dc3b97",
+    "text": "Okay. If you don't have any questions or need anything further, we can end this conversation.\n",
+    "final": true,
+    "firstReceivedTime": 1747545677870,
+    "lastReceivedTime": 1747545681814,
+    "startTime": 0,
+    "endTime": 0,
+    "language": ""
+  }
+]
