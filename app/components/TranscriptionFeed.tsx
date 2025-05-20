@@ -34,7 +34,7 @@ export default function Transcriptions() {
     const updateTranscriptions = (
       segments: TranscriptionSegment[],
       participant?: Participant,
-      publication?: TrackPublication
+      publication?: TrackPublication,
     ) => {
       console.log("Transcription received", segments, participant, publication);
 
