@@ -11,9 +11,11 @@ export async function POST(req: NextRequest) {
 
   const svc = new RoomServiceClient(wsUrl, apiKey, apiSecret);
 
+  console.log("instructions: ", instructions);
+
   await svc.createRoom({
     name: room,
-    username: name,
+    // username: name,
     metadata: JSON.stringify({ instructions }),
     emptyTimeout: 60, // optional
   });

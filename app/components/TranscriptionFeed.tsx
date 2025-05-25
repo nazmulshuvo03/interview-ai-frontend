@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useRef } from "react";
 import {
   TranscriptionSegment,
@@ -8,25 +10,42 @@ import {
 } from "livekit-client";
 import { useMaybeRoomContext } from "@livekit/components-react";
 
+type TranscriptEntry = {
+  id: string;
+  key: number;
+  text: string;
+  speaker: "user" | "ai";
+  identity: string;
+};
+
 export default function Transcriptions() {
   const room = useMaybeRoomContext();
-  const [transcriptions, setTranscriptions] = useState<
-    {
-      id: string;
-      key: number;
-      text: string;
-      speaker: "user" | "ai";
-      identity: string;
-    }[]
-  >([]);
+  const [transcriptions, setTranscriptions] = useState<TranscriptEntry[]>([]);
   const currentSpeaker = useRef<"user" | "ai" | null>(null);
-  const currentMessage = useRef<{
-    id: string;
-    key: number;
-    text: string;
-    speaker: "user" | "ai";
-    identity: string;
-  } | null>(null);
+  const currentMessage = useRef<TranscriptEntry | null>(null);
+
+  // LocalStorage or DB entry point
+  const storeTranscript = (entry: TranscriptEntry) => {
+    if (!entry.text.trim()) return;
+
+    // Save to state
+    setTranscriptions((prev) => [...prev, entry]);
+
+    // Save to localStorage
+    try {
+      const existing = JSON.parse(
+        localStorage.getItem("interview_transcript") || "[]",
+      );
+      localStorage.setItem(
+        "interview_transcript",
+        JSON.stringify([...existing, entry]),
+      );
+    } catch (e) {
+      console.error("Failed to store transcript in localStorage", e);
+    }
+
+    // TODO: Send transcriptions to Database
+  };
 
   useEffect(() => {
     if (!room) return;
@@ -38,19 +57,28 @@ export default function Transcriptions() {
     ) => {
       console.log("Transcription received", segments, participant, publication);
 
-      setTranscriptions((prev) => {
-        const updated = [...prev];
-        for (const segment of segments) {
-          const speaker: "user" | "ai" =
-            participant instanceof LocalParticipant ? "user" : "ai";
-          const identity = participant?.identity || speaker;
+      for (const segment of segments) {
+        const speaker: "user" | "ai" =
+          participant instanceof LocalParticipant ? "user" : "ai";
+        const identity = participant?.identity || speaker;
 
-          if (currentSpeaker.current !== speaker) {
-            // Speaker switched — push the current message if it exists
-            if (currentMessage.current) {
-              updated.push({ ...currentMessage.current });
-            }
-            // Start a new message
+        if (currentSpeaker.current !== speaker) {
+          if (currentMessage.current) {
+            storeTranscript({ ...currentMessage.current });
+          }
+          currentMessage.current = {
+            id: segment.id,
+            key: segment.lastReceivedTime,
+            text: segment.text,
+            speaker,
+            identity,
+          };
+          currentSpeaker.current = speaker;
+        } else {
+          if (currentMessage.current) {
+            currentMessage.current.text = segment.text;
+            currentMessage.current.key = segment.lastReceivedTime;
+          } else {
             currentMessage.current = {
               id: segment.id,
               key: segment.lastReceivedTime,
@@ -59,32 +87,15 @@ export default function Transcriptions() {
               identity,
             };
             currentSpeaker.current = speaker;
-          } else {
-            // Same speaker — update current message
-            if (currentMessage.current) {
-              currentMessage.current.text = segment.text;
-              currentMessage.current.key = segment.lastReceivedTime;
-            } else {
-              currentMessage.current = {
-                id: segment.id,
-                key: segment.lastReceivedTime,
-                text: segment.text,
-                speaker,
-                identity,
-              };
-              currentSpeaker.current = speaker;
-            }
-          }
-
-          // If final, commit immediately
-          if (segment.final && currentMessage.current) {
-            updated.push({ ...currentMessage.current });
-            currentMessage.current = null;
-            currentSpeaker.current = null;
           }
         }
-        return updated;
-      });
+
+        if (segment.final && currentMessage.current) {
+          storeTranscript({ ...currentMessage.current });
+          currentMessage.current = null;
+          currentSpeaker.current = null;
+        }
+      }
     };
 
     room.on(RoomEvent.TranscriptionReceived, updateTranscriptions);

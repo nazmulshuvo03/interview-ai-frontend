@@ -12,6 +12,7 @@ import { Room, Track } from "livekit-client";
 import "@livekit/components-styles";
 import { useEffect, useState } from "react";
 import TranscriptionFeed from "../components/TranscriptionFeed";
+import SummarizeTranscript from "../components/SummarizeTranscript";
 import { useSearchParams, useRouter } from "next/navigation";
 
 export default function Page() {
@@ -54,6 +55,7 @@ export default function Page() {
   }, [roomInstance, room, name]);
 
   const handleLeave = async () => {
+    localStorage.removeItem("interview_transcript");
     await roomInstance.disconnect();
     router.push("/");
   };
@@ -75,6 +77,7 @@ export default function Page() {
           Leave Room
         </button>
       </div>
+      <SummarizeTranscript />
       <TranscriptionFeed />
     </RoomContext.Provider>
   );
