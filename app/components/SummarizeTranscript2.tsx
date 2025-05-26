@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { getAllTranscriptions } from "@/lib/actions/transcriptions";
 
 export default function SummarizeTranscript() {
   const [loading, setLoading] = useState(false);
@@ -11,19 +10,31 @@ export default function SummarizeTranscript() {
     setLoading(true);
     setSummary("");
 
+    const raw = localStorage.getItem("interview_transcript");
+    if (!raw) {
+      setSummary("No transcription data found.");
+      setLoading(false);
+      return;
+    }
+
+    let parsed;
     try {
-      const entries = await getAllTranscriptions();
+      parsed = JSON.parse(raw) as {
+        speaker: string;
+        text: string;
+        identity?: string;
+      }[];
+    } catch {
+      setSummary("Error parsing transcript data.");
+      setLoading(false);
+      return;
+    }
 
-      if (!entries || entries.length === 0) {
-        setSummary("No transcription data found.");
-        setLoading(false);
-        return;
-      }
+    const transcriptText = parsed
+      .map((entry) => `${entry.speaker.toUpperCase()}: ${entry.text}`)
+      .join("\n");
 
-      const transcriptText = entries
-        .map((entry) => `${entry.speaker.toUpperCase()}: ${entry.text}`)
-        .join("\n");
-
+    try {
       const response = await fetch("/api/summarize", {
         method: "POST",
         headers: {
@@ -34,15 +45,14 @@ export default function SummarizeTranscript() {
 
       const data = await response.json();
       console.log("transcript api response: ", data);
-
       if (response.ok && data.summary) {
         setSummary(data.summary);
       } else {
         setSummary("Failed to generate summary.");
       }
     } catch (err) {
-      console.error(err);
       setSummary("Request failed. Please try again.");
+      console.error(err);
     }
 
     setLoading(false);

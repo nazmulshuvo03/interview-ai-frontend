@@ -13,7 +13,7 @@ export default function Home() {
       <ClientOnly>
         {/* <AudioTest /> */}
         {/* <VoiceChat /> */}
-        <AudioRecorder />
+        {/* <AudioRecorder /> */}
         {/* <TextToSpeech /> */}
         {/* <GeminiChat /> */}
         <InterviewStarter />

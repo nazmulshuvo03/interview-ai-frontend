@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   TranscriptionSegment,
   Participant,
@@ -9,27 +9,42 @@ import {
   LocalParticipant,
 } from "livekit-client";
 import { useMaybeRoomContext } from "@livekit/components-react";
-import { TranscriptEntry } from "@/lib/db";
-import { addTranscription } from "@/lib/actions/transcriptions";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "@/lib/db";
 
-export default function TranscriptionFeed() {
+type TranscriptEntry = {
+  id: string;
+  key: number;
+  text: string;
+  speaker: "user" | "ai";
+  identity: string;
+};
+
+export default function Transcriptions() {
   const room = useMaybeRoomContext();
+  const [transcriptions, setTranscriptions] = useState<TranscriptEntry[]>([]);
   const currentSpeaker = useRef<"user" | "ai" | null>(null);
   const currentMessage = useRef<TranscriptEntry | null>(null);
 
-  const transcriptions = useLiveQuery(() =>
-    db.transcriptions.orderBy("key").toArray(),
-  );
-
-  const storeTranscript = async (entry: TranscriptEntry) => {
+  // LocalStorage or DB entry point
+  const storeTranscript = (entry: TranscriptEntry) => {
     if (!entry.text.trim()) return;
+
+    // Save to state
+    setTranscriptions((prev) => [...prev, entry]);
+
+    // Save to localStorage
     try {
-      await addTranscription(entry);
-    } catch (err) {
-      console.error("Failed to save transcription", err);
+      const existing = JSON.parse(
+        localStorage.getItem("interview_transcript") || "[]",
+      );
+      localStorage.setItem(
+        "interview_transcript",
+        JSON.stringify([...existing, entry]),
+      );
+    } catch (e) {
+      console.error("Failed to store transcript in localStorage", e);
     }
+
+    // TODO: Send transcriptions to Database
   };
 
   useEffect(() => {
@@ -40,6 +55,8 @@ export default function TranscriptionFeed() {
       participant?: Participant,
       publication?: TrackPublication,
     ) => {
+      console.log("Transcription received", segments, participant, publication);
+
       for (const segment of segments) {
         const speaker: "user" | "ai" =
           participant instanceof LocalParticipant ? "user" : "ai";
@@ -87,15 +104,15 @@ export default function TranscriptionFeed() {
     };
   }, [room]);
 
-  if (!transcriptions) return <p className="p-4">Loading...</p>;
-
   return (
-    <ul className="p-4 space-y-2">
-      {transcriptions.map((msg) => (
-        <li key={`${msg.speaker}-${msg.key}`} className="text-sm">
-          <strong>[{msg.speaker}]</strong> {msg.text}
-        </li>
-      ))}
+    <ul>
+      {transcriptions
+        .sort((a, b) => a.key - b.key)
+        .map((msg, index) => (
+          <li key={`${msg.speaker}-${msg.key}-${index}`}>
+            [{msg.identity}] {msg.text}
+          </li>
+        ))}
     </ul>
   );
 }
