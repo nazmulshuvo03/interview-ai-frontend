@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db, TranscriptEntry } from "@/lib/db";
 
 export async function getAllTranscriptions() {
   const all = await db.transcriptions.orderBy("key").toArray();

@@ -27,7 +27,7 @@ export default function InterviewStarter() {
 
       router.push(`/room?room=${room}&user=${encodeURIComponent(safeName)}`);
     } catch (err) {
-      alert("Error creating room: ", err);
+      alert("Error creating room: " + err);
     }
   };
 

@@ -30,16 +30,19 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const at = new AccessToken(apiKey, apiSecret, { identity: username });
   const customInstructions =
     "The name of the user is Nazmul Alom. He is a Full Stack Developer with 6 years of experience. He is applying for a Full stack developer position at Upsurge. Main focus of the interview will be React, NextJs and NodeJs, with PostgreSQL database";
+
+  const at = new AccessToken(apiKey, apiSecret, {
+    identity: username,
+    metadata: JSON.stringify({ instructions: customInstructions }),
+  });
 
   at.addGrant({
     room,
     roomJoin: true,
     canPublish: true,
     canSubscribe: true,
-    metadata: JSON.stringify({ instructions: customInstructions }),
   });
 
   return NextResponse.json(
