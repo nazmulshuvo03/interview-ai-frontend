@@ -1,26 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import useCombinedTranscriptions from "../hooks/useCombinedTranscriptions";
+import { getAllTranscriptions } from "@/lib/actions/transcriptions";
 
 export default function SummarizeTranscript() {
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState("");
-  const combinedTranscriptions = useCombinedTranscriptions();
 
   const handleSummarize = async () => {
     setLoading(true);
     setSummary("");
 
     try {
-      if (!combinedTranscriptions || combinedTranscriptions.length === 0) {
+      const entries = await getAllTranscriptions();
+
+      if (!entries || entries.length === 0) {
         setSummary("No transcription data found.");
         setLoading(false);
         return;
       }
 
-      const transcriptText = combinedTranscriptions
-        .map((entry) => `${entry.role.toUpperCase()}: ${entry.text}`)
+      const transcriptText = entries
+        .map((entry) => `${entry.speaker.toUpperCase()}: ${entry.text}`)
         .join("\n");
 
       const response = await fetch("/api/summarize", {

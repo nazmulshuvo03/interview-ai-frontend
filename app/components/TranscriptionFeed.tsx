@@ -1,101 +1,44 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import {
-  TranscriptionSegment,
-  Participant,
-  TrackPublication,
-  RoomEvent,
-  LocalParticipant,
-} from "livekit-client";
-import { useMaybeRoomContext } from "@livekit/components-react";
-import { TranscriptEntry } from "@/lib/db";
-import { addTranscription } from "@/lib/actions/transcriptions";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "@/lib/db";
+import useCombinedTranscriptions from "../hooks/useCombinedTranscriptions";
+import * as React from "react";
+import SummarizeTranscript from "./SummarizeTranscript";
 
 export default function TranscriptionFeed() {
-  const room = useMaybeRoomContext();
-  const currentSpeaker = useRef<"user" | "ai" | null>(null);
-  const currentMessage = useRef<TranscriptEntry | null>(null);
+  const combinedTranscriptions = useCombinedTranscriptions();
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const transcriptions = useLiveQuery(() =>
-    db.transcriptions.orderBy("key").toArray(),
-  );
-
-  const storeTranscript = async (entry: TranscriptEntry) => {
-    if (!entry.text.trim()) return;
-    try {
-      await addTranscription(entry);
-    } catch (err) {
-      console.error("Failed to save transcription", err);
+  // scroll to bottom when new transcription is added
+  React.useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  };
-
-  useEffect(() => {
-    if (!room) return;
-
-    const updateTranscriptions = (
-      segments: TranscriptionSegment[],
-      participant?: Participant,
-      publication?: TrackPublication,
-    ) => {
-      for (const segment of segments) {
-        const speaker: "user" | "ai" =
-          participant instanceof LocalParticipant ? "user" : "ai";
-        const identity = participant?.identity || speaker;
-
-        if (currentSpeaker.current !== speaker) {
-          if (currentMessage.current) {
-            storeTranscript({ ...currentMessage.current });
-          }
-          currentMessage.current = {
-            id: segment.id,
-            key: segment.lastReceivedTime,
-            text: segment.text,
-            speaker,
-            identity,
-          };
-          currentSpeaker.current = speaker;
-        } else {
-          if (currentMessage.current) {
-            currentMessage.current.text = segment.text;
-            currentMessage.current.key = segment.lastReceivedTime;
-          } else {
-            currentMessage.current = {
-              id: segment.id,
-              key: segment.lastReceivedTime,
-              text: segment.text,
-              speaker,
-              identity,
-            };
-            currentSpeaker.current = speaker;
-          }
-        }
-
-        if (segment.final && currentMessage.current) {
-          storeTranscript({ ...currentMessage.current });
-          currentMessage.current = null;
-          currentSpeaker.current = null;
-        }
-      }
-    };
-
-    room.on(RoomEvent.TranscriptionReceived, updateTranscriptions);
-    return () => {
-      room.off(RoomEvent.TranscriptionReceived, updateTranscriptions);
-    };
-  }, [room]);
-
-  if (!transcriptions) return <p className="p-4">Loading...</p>;
+  }, [combinedTranscriptions]);
 
   return (
-    <ul className="p-4 space-y-2">
-      {transcriptions.map((msg) => (
-        <li key={`${msg.speaker}-${msg.key}`} className="text-sm">
-          <strong>[{msg.speaker}]</strong> {msg.text}
-        </li>
-      ))}
-    </ul>
+    <div className="relative h-[200px] w-[512px] max-w-[90vw] mx-auto">
+      {/* Fade-out gradient mask */}
+      <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-[var(--lk-bg)] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--lk-bg)] to-transparent z-10 pointer-events-none" />
+
+      {/* Scrollable content */}
+      <div
+        ref={containerRef}
+        className="h-full flex flex-col gap-2 overflow-y-auto px-4 py-8"
+      >
+        {combinedTranscriptions.map((segment) => (
+          <div
+            id={segment.id}
+            key={segment.id}
+            className={
+              segment.role === "assistant"
+                ? "p-2 self-start fit-content"
+                : "bg-gray-800 rounded-md p-2 self-end fit-content"
+            }
+          >
+            {segment.text}
+          </div>
+        ))}
+      </div>
+      <SummarizeTranscript />
+    </div>
   );
 }
